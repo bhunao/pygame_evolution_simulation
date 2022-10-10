@@ -73,7 +73,7 @@ class App:
         self.screen.fill("darkgreen")
         dirt = self.update()
         pygame.display.update(dirt)
-        pygame.display.flip()
+        # pygame.display.flip()
 
     def quit(self):
         print(f"quiting... {self.running=}")
