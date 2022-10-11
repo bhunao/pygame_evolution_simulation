@@ -73,7 +73,7 @@ class App:
         self.screen.fill("darkgreen")
         dirt = self.update()
         pygame.display.update(dirt)
-        # pygame.display.flip()
+        pygame.display.flip()
 
     def quit(self):
         print(f"quiting... {self.running=}")
@@ -131,7 +131,7 @@ class Food(pygame.sprite.Sprite):
 class Organism(pygame.sprite.Sprite):
     def __init__(self, *groups):
         super().__init__(*groups)
-        self.image = pygame.Surface((10, 10))
+        self.image = pygame.Surface((100, 100))
         self.rect = self.image.get_rect()
         self.rect.center = 250, 250
 
