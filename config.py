@@ -1,8 +1,8 @@
 configs = {
     "name": "example project",
     "screen": {
-        "width": 50,
-        "height": 50,
-        "upscale": 10
+        "width": 128,
+        "height": 128,
+        "upscale": 4
     }
 }

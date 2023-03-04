@@ -29,7 +29,7 @@ def run_neat(config, eval_genomes):
     p.add_reporter(neat.Checkpointer(50))
 
     # Run for up to 300 generations.
-    winner = p.run(eval_genomes, 1000)
+    winner = p.run(eval_genomes, 5000)
 
     with open("best.pkl", "wb") as f:
         pickle.dump(winner, f)
@@ -44,10 +44,9 @@ def get_max_position(n_list: List[int]):
             return i
     raise ValueError
 
-def add_winners_fitness(win_surface, cells):
-    rect_area = win_surface.get_rect()
+def add_winners_fitness(win_area, cells):
+    win_rect = win_area.get_rect()
     for cell in cells:
-        collided = rect_area.collidepoint(cell.pos)
+        collided = win_rect.collidepoint(cell.pos)
         if collided:
             cell.genome.fitness += 10
-

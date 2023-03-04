@@ -1,3 +1,4 @@
+from typing import Iterable
 import neat
 
 from pygame import Surface
@@ -5,6 +6,16 @@ from pygame.math import Vector2
 from config import configs
 
 from functions import get_max_position
+
+WIDTH = configs["screen"]["width"]
+HEIGHT = configs["screen"]["height"]
+DIRECTIONS = [
+(0, 0),    # stop
+(1, 0),    # up
+(0, 1),    # right
+(-1, 0),   # down
+(0, -1),   # left
+]
 
 
 class Cell:
@@ -17,10 +28,12 @@ class Cell:
         self.genome.fitness = 0
         self.cells = cells
         self.color = "black"
+        self.direction = 0
+
 
     def move(self, x=0, y=0):
-        max_x = configs["screen"]["width"] - 1
-        max_y = configs["screen"]["height"] - 1
+        max_x = WIDTH - 1
+        max_y = HEIGHT - 1
 
         current_x = int(self.pos.x + x)
         current_y = int(self.pos.y + y)
@@ -35,28 +48,69 @@ class Cell:
             return collided
 
         self.pos += Vector2(x, y)
+    
+    def rotate(self, angle):
+        if angle == 0:
+            return
+        self.direction = (self.direction + angle) % 4
+    
+
+
+    def action_output(self):
+        output = self.brain.activate(self.senser_neuron())
+        output_index = get_max_position(output)
+
+
+        output_params = [
+            (0, 0),                             # stop
+            (1, 0),                             # up
+            (0, 1),                             # right
+            (-1, 0),                            # down
+            (0, -1),                            # left
+            DIRECTIONS[self.direction],         # foward
+            DIRECTIONS[(self.direction-2) % 4], # backwards
+            1,                                  # rotate right
+            -1,                                 # rotate left
+        ]
+        output_func = [
+            self.move,
+            self.move,
+            self.move,
+            self.move,
+            self.move,
+            self.move,
+            self.move,
+            self.rotate,
+            self.rotate
+        ]
+        func = output_func[output_index]
+        params = output_params[output_index]
+        if isinstance(params, Iterable):
+            func(*params)
+        else:
+            func(params)
+        # print(func.__name__, params)
+
+        # x, y = DIRECTIONS[output_index]
+        # self.move(x, y)
 
     def update(self, surface: Surface):
         self.cellsor = "black"
         if self.brain is None:
             return
 
-        output = self.brain.activate(self.senses())
-        output_index = get_max_position(output)
-
-        move_d = [
-            (0, 0),    # stop
-            (1, 0),    # up
-            (0, 1),    # right
-            (-1, 0),   # down
-            (0, -1),   # left
-        ]
-        x, y = move_d[output_index]
-        self.move(x, y)
+        self.action_output()
         self.draw(surface)
 
-    def senses(self):
-        return self.pos.x, self.pos.y, self.collided
+    def senser_neuron(self):
+        normalized_x = (self.pos.x - 0) / (WIDTH - 0)
+        normalized_y = (self.pos.y - 0) / (WIDTH - 0)
+        data = [
+                self.pos.x,
+                self.pos.y,
+                self.collided
+        ]
+        return data
 
     def collide(self, x, y):
         self.color = "black"
