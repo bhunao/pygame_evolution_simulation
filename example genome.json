@@ -1,0 +1,41 @@
+{
+    'key': 299,
+    'connections': {
+        (-1, 236): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201A50 >, 
+        (-1, 237): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201A10 >, 
+        (-1, 238): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201550 >, 
+        (-2, 236): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201510 >, 
+        (-2, 237): <neat.genes.DefaultConnectionGene object at 0x000001A5CE2014D0>, 
+        (-2, 238): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201490>, 
+        (-3, 236): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201450>, 
+        (-3, 237): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201410>, 
+        (-3, 238): <neat.genes.DefaultConnectionGene object at 0x000001A5CE2013D0>, 
+        (236, 0): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201390>, 
+        (236, 1): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201350>, 
+        (236, 2): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201310>, 
+        (236, 3): <neat.genes.DefaultConnectionGene object at 0x000001A5CE2012D0>, 
+        (236, 4): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201290>, 
+        (237, 0): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201250>, 
+        (237, 1): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201210>, 
+        (237, 2): <neat.genes.DefaultConnectionGene object at 0x000001A5CE2011D0>, 
+        (237, 3): <neat.genes.DefaultConnectionGene object at 0x000001A5CE201190>, 
+        (237, 4): <neat.genes.DefaultConnectionGene object at 0x000001A5CE200950>, 
+        (238, 0): <neat.genes.DefaultConnectionGene object at 0x000001A5CE200C50>, 
+        (238, 1): <neat.genes.DefaultConnectionGene object at 0x000001A5CE2007D0>, 
+        (238, 2): <neat.genes.DefaultConnectionGene object at 0x000001A5CE200890>, 
+        (238, 3): <neat.genes.DefaultConnectionGene object at 0x000001A5CE200C10>, 
+        (238, 4): <neat.genes.DefaultConnectionGene object at 0x000001A5CE200CD0>, 
+        (-3, 2): <neat.genes.DefaultConnectionGene object at 0x000001A5CE2001D0>
+    }, 
+'nodes': {
+        0: <neat.genes.DefaultNodeGene object at 0x000001A5CE200C90>,
+        1: <neat.genes.DefaultNodeGene object at 0x000001A5CE200590>,
+        2: <neat.genes.DefaultNodeGene object at 0x000001A5CE200510>,
+        3: <neat.genes.DefaultNodeGene object at 0x000001A5CE200490>,
+        4: <neat.genes.DefaultNodeGene object at 0x000001A5CE200410>,
+        236: <neat.genes.DefaultNodeGene object at 0x000001A5CE200390>,
+        237: <neat.genes.DefaultNodeGene object at 0x000001A5CE200310>,
+        238: <neat.genes.DefaultNodeGene object at 0x000001A5CE200290>
+    }, 
+'fitness': 0
+}
