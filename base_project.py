@@ -1,38 +1,39 @@
-from random import randint
 import sys
-import numpy as np
-import pygame, neat
-from functions import create_neat_config, run_neat
-from pygame.time import get_ticks
+import pygame
+
+from random import randint
+
+from neat.nn import FeedForwardNetwork
+from pygame import display, Surface, init
+from pygame.time import Clock ,get_ticks
 from pygame.transform import scale
 
-from sprites.Cell import Cell
+
 from config import configs
+from functions import add_winners_fitness, create_neat_config, run_neat
+from sprites.Cell import Cell
 
 
 def main(genomes, config):
-    pygame.init()
+    init()
     WIDTH = configs["screen"]["width"]
     HEIGHT = configs["screen"]["height"]
     UPSCALE = configs["screen"]["upscale"]
 
     cells_list = []
 
-    screen = pygame.display.set_mode((WIDTH*UPSCALE, HEIGHT*UPSCALE))
+    screen = display.set_mode((WIDTH*UPSCALE, HEIGHT*UPSCALE))
     screen.set_alpha(None)
-    down_scale_screen = pygame.Surface((WIDTH, HEIGHT))
-    clock = pygame.time.Clock()
-    current_tick = get_ticks()
-    ticks_to_finish = 5000 + get_ticks()
+    down_scale_screen = Surface((WIDTH, HEIGHT))
+    clock = Clock()
+    end_tick = 5000 + get_ticks()
 
-    rect_surface = pygame.Surface((WIDTH*.5, HEIGHT))
+    rect_surface = Surface((WIDTH*.5, HEIGHT))
     rect_surface.set_alpha(50)
     rect_surface.fill("green")
 
-
-
     for genomed_id, genome in genomes:
-        brain = neat.nn.FeedForwardNetwork.create(genome, config)
+        brain = FeedForwardNetwork.create(genome, config)
         x = randint(0, WIDTH-1)
         y = randint(0, WIDTH-1)
 
@@ -53,23 +54,17 @@ def main(genomes, config):
                     pygame.quit()
                     exit()
         
-        for c in cells_list:
-            c.update(down_scale_screen)
-            c.draw(down_scale_screen)
+        for cell in cells_list:
+            cell.update(down_scale_screen)
+
+        if get_ticks() >= end_tick:
+            add_winners_fitness(rect_surface, cells_list)
+            break
 
         scaled_win = scale(down_scale_screen, screen.get_size())
         screen.blit(scaled_win, (0, 0))
         pygame.display.flip()
         clock.tick(60)
-
-        current_tick = get_ticks()
-        if current_tick >= ticks_to_finish:
-            rect_area = rect_surface.get_rect()
-            for c in cells_list:
-                collided = rect_area.collidepoint(c.pos)
-                if collided:
-                    c.genome.fitness += 10
-            break
 
 def eval_genomes(genomes, config):
     main(genomes, config)

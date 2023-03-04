@@ -1,9 +1,8 @@
 import os
-from typing import List
 import neat
 import pickle
 
-from pygame.math import Vector2
+from typing import List
 
 
 def create_neat_config():
@@ -44,3 +43,11 @@ def get_max_position(n_list: List[int]):
         if value == m:
             return i
     raise ValueError
+
+def add_winners_fitness(win_surface, cells):
+    rect_area = win_surface.get_rect()
+    for cell in cells:
+        collided = rect_area.collidepoint(cell.pos)
+        if collided:
+            cell.genome.fitness += 10
+
