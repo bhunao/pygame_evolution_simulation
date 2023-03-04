@@ -26,7 +26,7 @@ def run_neat(config, eval_genomes):
     p.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
-    p.add_reporter(neat.Checkpointer(50))
+    p.add_reporter(neat.Checkpointer(499))
 
     # Run for up to 300 generations.
     winner = p.run(eval_genomes, 5000)

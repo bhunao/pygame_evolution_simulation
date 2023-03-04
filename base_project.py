@@ -70,9 +70,9 @@ def main(genomes, config):
     side_panel = Surface((WIDTH, HEIGHT))
     down_scale_screen = Surface((WIDTH, HEIGHT))
     clock = Clock()
-    end_tick = 5000 + get_ticks()
+    end_tick = 10000 + get_ticks()
 
-    win_rect = Surface((WIDTH*.40, HEIGHT*.40))
+    win_rect = Surface((WIDTH*.35, HEIGHT*.35))
     win_rect.set_alpha(50)
     win_rect.fill("green")
 
