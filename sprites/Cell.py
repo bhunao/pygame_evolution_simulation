@@ -1,3 +1,5 @@
+
+from enum import Enum
 from typing import Iterable
 import neat
 
@@ -16,6 +18,24 @@ DIRECTIONS = [
 (-1, 0),   # down
 (0, -1),   # left
 ]
+
+class Directions(Enum):
+    STOP = (0, 0)    # STOP
+    UP = (1, 0)    # UP
+    RIGHT = (0, 1)    # RIGHT
+    DOWN = (-1, 0)   # DOWN
+    LEFT = (0, -1)   # LEFT
+
+class ActionOutput(Enum):
+    STOP = 0
+    UP = 1
+    RIGHT = 2
+    DOWN = 3
+    LEFT = 4
+    FOWARD = 5
+    BACKWARDS = 6
+    ROTATE_RIGHT = 7
+    ROTATE_LEFT = 8
 
 
 class Cell:
@@ -53,20 +73,16 @@ class Cell:
         if angle == 0:
             return
         self.direction = (self.direction + angle) % 4
-    
-
 
     def action_output(self):
         output = self.brain.activate(self.senser_neuron())
         output_index = get_max_position(output)
-
-
         output_params = [
-            (0, 0),                             # stop
-            (1, 0),                             # up
-            (0, 1),                             # right
-            (-1, 0),                            # down
-            (0, -1),                            # left
+            Directions.STOP.value,
+            Directions.UP.value,
+            Directions.RIGHT.value,
+            Directions.DOWN.value,
+            Directions.LEFT.value,
             DIRECTIONS[self.direction],         # foward
             DIRECTIONS[(self.direction-2) % 4], # backwards
             1,                                  # rotate right
@@ -83,16 +99,34 @@ class Cell:
             self.rotate,
             self.rotate
         ]
-        func = output_func[output_index]
-        params = output_params[output_index]
-        if isinstance(params, Iterable):
-            func(*params)
-        else:
-            func(params)
-        # print(func.__name__, params)
 
-        # x, y = DIRECTIONS[output_index]
-        # self.move(x, y)
+        if output_index == 0:
+            self.move(*Directions.STOP.value)
+        elif output_index == 1:
+            self.move(*Directions.UP.value)
+        elif output_index == 2:
+            self.move(*Directions.RIGHT.value)
+        elif output_index == 3:
+            self.move(*Directions.DOWN.value)
+        elif output_index == 4:
+            self.move(*Directions.LEFT.value)
+        elif output_index == 5:
+            direct = DIRECTIONS[self.direction]
+            self.move(*direct)
+        elif output_index == 6:
+            direct = DIRECTIONS[(self.direction + 2) % 4]
+            self.move(*direct)
+        elif output_index == 7:
+            self.rotate(1)
+        elif output_index == 8:
+            self.rotate(-1)
+
+        # func = output_func[output_index]
+        # params = output_params[output_index]
+        # if isinstance(params, Iterable):
+        #     func(*params)
+        # else:
+        #     func(params)
 
     def update(self, surface: Surface):
         self.cellsor = "black"
