@@ -1,5 +1,3 @@
-# bipbop
-
 # Pygame Evolution Simulation
 
 This is a simulation of a neural network implemented using the Pygame library in Python. The purpose of the simulation is to showcase the behavior of small organisms with limited inputs and outputs while they evolve.
