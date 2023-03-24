@@ -18,8 +18,8 @@ python main.py
 The simulation will start running and Pygame will open a window showing the cells moving around.
 
 ## Configuration
-`config.py`: This file contains settings related to the simulation, such as the screen dimensions.
-`config.txt`: This file contains settings related to the evolution and the NEAT algorithm.
+`config.py`: This file contains settings related to the simulation, such as the screen dimensions.  
+`config.txt`: This file contains settings related to the evolution and the NEAT algorithm.  
 
 ## Credits
 This simulation was based on the [NEAT-Python](https://neat-python.readthedocs.io/) library developed by CodeReclaimers.
