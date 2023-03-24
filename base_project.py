@@ -37,22 +37,6 @@ class BrainInterface:
         layers = layer1, layer2, layer3
         
         rect_list = []
-        # for j, layer in enumerate(layers):
-        #     print(j, layer)
-        #     for i, node in enumerate(layer):
-        #         x = 64*(j+1)
-        #         y = 32*(i+1)
-        #         rect = Rect(x, y, 16, 16)
-        #         rect_list.append(rect)
-        #         # draw.rect(self.surface, "white", rect)
-
-        #         print((x, y), node, rect)
-        
-        # for i, n1 in enumerate(layer1):
-        #     for j, n2 in enumerate(layer2):
-        #         x = 64*(j+1)
-        #         y = 32*(i+1)
-        #         draw.line(self.surface, "red", (x, y), (x+32, y+32))
         
         for rect in rect_list:
             draw.rect(self.surface, "white", rect)
@@ -70,7 +54,7 @@ def main(genomes, config):
     side_panel = Surface((WIDTH, HEIGHT))
     down_scale_screen = Surface((WIDTH, HEIGHT))
     clock = Clock()
-    end_tick = 10000 + get_ticks()
+    end_tick = 3000 + get_ticks()
 
     win_rect = Surface((WIDTH*.35, HEIGHT*.35))
     win_rect.set_alpha(50)
@@ -89,7 +73,7 @@ def main(genomes, config):
 
     while 1:
         down_scale_screen.fill("gray")
-        down_scale_screen.blit(win_rect, (0, 0))
+        down_scale_screen.blit(win_rect, down_scale_screen.get_rect().center)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -112,7 +96,7 @@ def main(genomes, config):
         screen.blit(scaled_win, (0, 0))
         screen.blit(side_panel, (WIDTH*UPSCALE, 0))
         pygame.display.flip()
-        # clock.tick(60)
+        clock.tick(60)
 
 def eval_genomes(genomes, config):
     main(genomes, config)
