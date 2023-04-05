@@ -3,7 +3,21 @@ import neat
 import pickle
 
 from typing import List
+from pygame import Rect, Surface
+from pygame.font import SysFont
 
+
+def survive_condition(entity , rect: Rect):
+    return rect.collidepoint(*entity.pos)
+
+def draw_text(surface: Surface, text: str | int, pos, size=15, color=(255, 255, 255), bold: bool = False):
+    font = SysFont("Arial", size, bold)
+    font.set_bold(True)
+    text = font.render(str(text), True, color)
+    text_rect = text.get_rect()
+    text_rect.center = pos
+    surface.blit(text, text_rect)
+    return text_rect
 
 def create_neat_config():
     local_dir = os.path.dirname(__file__)
