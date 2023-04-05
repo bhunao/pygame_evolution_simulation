@@ -50,7 +50,6 @@ class Cell:
         self.color = "black"
         self.direction = 0
 
-
     def move(self, x=0, y=0):
         max_x = WIDTH - 1
         max_y = HEIGHT - 1
