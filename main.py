@@ -4,43 +4,22 @@ import pygame
 from random import randint
 
 from neat.nn import FeedForwardNetwork
-from pygame import Rect, display, Surface, init, draw
-from pygame.time import Clock ,get_ticks
+from pygame import Rect, display, Surface, init
+from pygame.time import Clock, get_ticks
 from pygame.transform import scale
 
 
 from config import configs
-from functions import add_winners_fitness, create_neat_config, run_neat
-from sprites.Cell import Cell
+from functions import create_neat_config, draw_text, run_neat, survive_condition
+from system import System, Entity
 
 
-class BrainInterface:
-    def __init__(self, cell: Cell, surface: Surface) -> None:
-        self.cell = cell
-        self.surface = surface
-        
-        for node in self.cell.brain.node_evals:
-            _id = node[0]
-            activation = node[1]
-            agregation = node[2]
-            weight = node[3]
-            something = node[4]
-            linked_nodes = node[5]
-    
-    def update(self):
-        self.draw()
-
-    def draw(self):
-        layer1 = [-1, -2, -3]
-        layer2 = [304]
-        layer3 = [0, 1, 2 ,3 ,4]
-        layers = layer1, layer2, layer3
-        
-        rect_list = []
-        
-        for rect in rect_list:
-            draw.rect(self.surface, "white", rect)
-
+class Cell(Entity):
+    def __init__(self, brain, genome, pos=[0,0]) -> None:
+        self.brain = brain
+        self.genome = genome
+        self.genome.fitness = 0
+        self.pos = pos
 
 def main(genomes, config):
     init()
@@ -48,32 +27,38 @@ def main(genomes, config):
     HEIGHT = configs["screen"]["height"]
     UPSCALE = configs["screen"]["upscale"]
 
-    cells_list = []
+    X = 2 ** 6
+    WIDTH = X
+    HEIGHT = X
+    UPSCALE = 4
 
-    screen = display.set_mode((WIDTH*UPSCALE*2, HEIGHT*UPSCALE))
-    side_panel = Surface((WIDTH, HEIGHT))
+    screen = display.set_mode((WIDTH*UPSCALE, HEIGHT*UPSCALE))
     down_scale_screen = Surface((WIDTH, HEIGHT))
-    clock = Clock()
-    end_tick = 3000 + get_ticks()
+    step = 0
+    max_step = X * 2
+    max_step = 250
 
-    win_rect = Surface((WIDTH*.35, HEIGHT*.35))
-    win_rect.set_alpha(50)
-    win_rect.fill("green")
+    survive_surf = Surface((WIDTH*.20, HEIGHT*.20))
+    survive_surf.set_alpha(50)
+    survive_surf.fill("green")
+    survive_rect =  survive_surf.get_rect()
+
+
+    s = System(down_scale_screen)
 
     for genomed_id, genome in genomes:
         brain = FeedForwardNetwork.create(genome, config)
-        x = randint(0, WIDTH-1)
-        y = randint(0, WIDTH-1)
+        MARGIN = int(X * 0.05)
+        x = randint(0 + MARGIN, WIDTH-1 - MARGIN)
+        y = randint(0 + MARGIN, WIDTH-1 - MARGIN)
 
-        cell = Cell((x,y), genome, brain, cells_list)
-        cells_list.append(cell)
-    
-    brain_interface = BrainInterface(cells_list[-1], side_panel)
+        entity = Cell(brain, genome, [x, y])
+        s._entities.append(entity)
 
-
-    while 1:
+    down_scale_screen.blit(survive_surf, (0, 0))
+    while True:
         down_scale_screen.fill("gray")
-        down_scale_screen.blit(win_rect, down_scale_screen.get_rect().center)
+        down_scale_screen.blit(survive_surf, (X/2, X/2))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -83,20 +68,27 @@ def main(genomes, config):
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     exit()
-        
-        for cell in cells_list:
-            cell.update(down_scale_screen)
-        brain_interface.update()
 
-        if get_ticks() >= end_tick:
-            add_winners_fitness(win_rect, cells_list)
+        step += 1
+        if step >= max_step:
+            survivors = filter(lambda e: survive_condition(e, survive_rect), s._entities)
+
+            def add_fitness(entity: Cell):
+                entity.genome.fitness += 10
+
+            [_ for _ in map(add_fitness, survivors)]
+            s._entities.clear()
             break
+        
+        for entity in s._entities:
+            s.draw(entity)
+            s.action_output(entity, (WIDTH, HEIGHT), survive_condition(entity, survive_rect))
 
         scaled_win = scale(down_scale_screen, (WIDTH*UPSCALE, HEIGHT*UPSCALE))
+        draw_text(scaled_win, max_step - step, (20, 20), 15)
         screen.blit(scaled_win, (0, 0))
-        screen.blit(side_panel, (WIDTH*UPSCALE, 0))
         pygame.display.flip()
-        clock.tick(60)
+        # clock.tick(30)
 
 def eval_genomes(genomes, config):
     main(genomes, config)
